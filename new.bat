@@ -37,28 +37,27 @@ reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupAppro
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Windows Defender" /f
 reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "WindowsDefender" /f
 rem Remove WD context menu
-reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
-reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
-reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
+regdelete “HKCR*\shellex\ContextMenuHandlers\EPP” /f
+reg delete “HKCR\Directory\shellex\ContextMenuHandlers\EPP” /f
+reg delete “HKCR\Drive\shellex\ContextMenuHandlers\EPP” /f
 rem Disable WD services
-reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
-rem Run "Disable WD.bat" again to disable WD services
+reg add “HKLM\System\CurrentControlSet\Services\WdBoot” /v “Start” /t REG_DWORD /d “4” /f
+reg add “HKLM\System\CurrentControlSet\Services\WdFilter” /v “Start” /t REG_DWORD /d “4” /f
+reg add “HKLM\System\CurrentControlSet\Services\WdNisDrv” /v “Start” /t REG_DWORD /d “4” /f
+reg add “HKLM\System\CurrentControlSet\Services\WdNisSvc” /v “Start” /t REG_DWORD /d “4” /f
+reg add “HKLM\System\CurrentControlSet\Services\WinDefend” /v “Start” /t REG_DWORD /d “4” /f
+reg add “HKLM\System\CurrentControlSet\Services\SecurityHealthService” /v “Start” /t REG_DWORD /d “4” /f
+rem Run “Disable WD.bat” again to disable WD services
 
 :: Xóa thư mục và tệp tin liên quan đến Windows Defender
-rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy"
-FOR /d %%f IN ("C:\Program Files\WindowsApps\Microsoft.SecHealthUI*") DO rmdir /s /q "%%f"
-powershell "Get-AppxPackage *SecHealth* | Reset-AppxPackage"
+rmdir /s /q “C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy”
+FOR /d %%f IN (“C:\Program Files\WindowsApps\Microsoft.SecHealthUI*”) DO rmdir /s /q “%%f”
+powershell “Get-AppxPackage SecHealth | Reset-AppxPackage”
 
 :: Tắt Windows Defender và các thành phần liên quan
 bcdedit /set disableelamdrivers yes
-powershell -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
-powershell -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
-
+powershell -WindowStyle Hidden -Command “Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend”
+powershell -WindowStyle Hidden -Command “Set-MpPreference -SubmitSamplesConsent 2”
 
 for %%d in ("C:\Windows\WinSxS\amd64_security-octagon*" "C:\Windows\WinSxS\x86_windows-defender*" "C:\Windows\WinSxS\wow64_windows-defender*" "C:\Windows\WinSxS\amd64_windows-defender*" "C:\Windows\SystemApps\Microsoft.Windows.AppRep.ChxApp_cw5n1h2txyewy" "C:\ProgramData\Microsoft\Windows Defender" "C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection" "C:\Program Files (x86)\Windows Defender Advanced Threat Protection" "C:\Program Files\Windows Defender Advanced Threat Protection" "C:\ProgramData\Microsoft\Windows Security Health" "C:\ProgramData\Microsoft\Storage Health" "C:\WINDOWS\System32\drivers\wd" "C:\Program Files (x86)\Windows Defender" "C:\Program Files\Windows Defender" "C:\Windows\System32\SecurityHealth" "C:\Windows\System32\WebThreatDefSvc" "C:\Windows\System32\Sgrm" "C:\Windows\Containers" "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\DefenderPerformance" "C:\Windows\System32\WindowsPowerShell\v1.0\Modules\DefenderPerformance" "C:\Windows\System32\WindowsPowerShell\v1.0\Modules\Defender" "C:\Windows\System32\Tasks_Migrated\Microsoft\Windows\Windows Defender" "C:\Windows\System32\Tasks\Microsoft\Windows\Windows Defender" "C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Defender" "C:\Windows\System32\HealthAttestationClient" "C:\Windows\GameBarPresenceWriter" "C:\Windows\bcastdvr") do rmdir "%%~d" /s /q
 
